@@ -8,7 +8,7 @@ from src.order.order_protocol import IOrder
 from src.util import OrderTypeEnum
 
 
-class IOrderStatus(Enum):
+class OrderStatus(Enum):
     FILLED = 1
     PARTIALLY_FILLED = 2
     OPEN = 3
