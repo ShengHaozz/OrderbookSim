@@ -51,7 +51,7 @@ class IOrderBook(Protocol):
     _open_orders: Collection[IOrderBookSlice]
     
     @abstractmethod
-    def process_order(self, order: IOrder) -> 'IOrderStatus':
+    def process_order(self, order: IOrder) -> 'OrderStatus':
         raise NotImplementedError
 
     @abstractmethod
