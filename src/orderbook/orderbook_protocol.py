@@ -24,34 +24,48 @@ class IOrderBookOrder(Protocol):
     order_owner: UUID
 
     @abstractmethod
-    def fill_order(self, IOrder) -> 'IOrderBookOrder':
+    def fill_order(self, order: IOrder) -> 'IOrderBookOrder':
         raise NotImplementedError
 
 class IOrderBookSlice(Protocol):
     """
     Aggregation of IOrderBookOrder at a specific price
     """
-    orders: Sequence[IOrderBookOrder]
+    _orders: Sequence[IOrderBookOrder]
     # Orders in slice must have some ordering to determine which order to fill first
 
     @abstractmethod
-    def fill_order(self, IOrder) -> 'IOrderBookSlice':
+    def fill_order(self, order: IOrder) -> 'IOrderBookSlice':
+        raise NotImplementedError
+    
+    @abstractmethod
+    def remove_order(self, order_owner: UUID) -> 'IOrderBookSlice':
+        raise NotImplementedError
+    
+    @abstractmethod
+    def add_orderbook_order(self, orderbook_order: IOrderBookOrder) -> 'IOrderBookSlice':
         raise NotImplementedError
 
 
 class IOrderBook(Protocol):
-    open_orders: Collection[IOrderBookSlice]
+    _open_orders: Collection[IOrderBookSlice]
     
     @abstractmethod
-    def process_order(self, IOrder) -> IOrderStatus:
+    def process_order(self, order: IOrder) -> 'IOrderStatus':
         raise NotImplementedError
 
     @abstractmethod
-    def get_bid(self) -> IOrderBookSlice:
+    def get_bid(self) -> 'IOrderBookSlice':
         raise NotImplementedError
     
     @abstractmethod
-    def get_ask(self) -> IOrderBookSlice:
+    def get_ask(self) -> 'IOrderBookSlice':
+        raise NotImplementedError
+    
+    @abstractmethod
+    def get_orderbook(self) -> 'IOrderBookView':
         raise NotImplementedError
     
 
+class IOrderBookView(Protocol):
+    pass
